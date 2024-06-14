@@ -1,31 +1,64 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-//Create Initial State
-const initialState = [
-  {
-    id: 1,
-    title: "Camera 1",
-    price: 300,
-    qty: 1,
-  },
-];
+const initialState = [];
 
-//Create the slice with Reducers
 const cartSlice = createSlice({
   name: "cart",
-  initialState,
+  initialState: initialState,
   reducers: {
     addToCart: (state, action) => {
-      const { id, title, price, qty } = action.payload;
-      state.push({ id, title, price, qty });
+      // Your logic for addToCart
+      const { id, title, price, image } = action.payload;
+
+      const existingItem = state.find((item) => item.id === id);
+      if (existingItem) {
+        existingItem.qty += 1;
+      } else {
+        state.push({
+          id,
+          title,
+          price,
+          image,
+          qty: 1,
+        });
+      }
+
+      console.log("State from addToCart :", state);
+      console.log("Action from addToCart :", action);
     },
     removeFromCart: (state, action) => {
-      const cartId = action.payload;
-      return state.filter((item) => item.id === cartId);
+      // Your logic for removeFromCart
+      console.log("State from removeFromCart :", state);
+      console.log("Action from removeFromCart :", action);
+      const { id } = action.payload;
+
+      return state.filter((item) => item.id !== id);
+    },
+    incrementQty: (state, action) => {
+      console.log("State from incrementQty :", state);
+      console.log("Action from incrementQty :", action);
+      // Your logic for incrementQty
+      const { id } = action.payload;
+
+      const existingItem = state.find((item) => item.id === id);
+      if (existingItem) {
+        (existingItem.qty += 1);
+      }
+    },
+    decrementQty: (state, action) => {
+      console.log("State from decrementQty :", state);
+      console.log("Action from decrementQty :", action);
+      // Your logic for decrementQty
+      const { id } = action.payload;
+
+      const existingItem = state.find((item) => item.id === id);
+      if (existingItem) {
+        (existingItem.qty -= 1);
+      }
     },
   },
 });
 
-//export the reducers(actions)
-export const { addToCart, removeFromCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, incrementQty, decrementQty } =
+  cartSlice.actions;
 export default cartSlice.reducer;
